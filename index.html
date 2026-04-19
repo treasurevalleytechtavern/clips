@@ -34,6 +34,61 @@
       background: #000;
     }
 
+    .tvtt-site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      width: 100%;
+      min-height: 86px;
+      padding: 12px 42px;
+      background: rgba(0, 0, 0, 0.92);
+      border-bottom: 1px solid rgba(99, 224, 229, 0.28);
+      backdrop-filter: blur(12px);
+    }
+
+    .tvtt-site-logo {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+    }
+
+    .tvtt-site-logo img {
+      display: block;
+      width: 148px;
+      height: auto;
+    }
+
+    .tvtt-site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;
+    }
+
+    .tvtt-site-nav a {
+      color: var(--tvtt-text);
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .tvtt-site-nav a:hover,
+    .tvtt-site-nav a:focus-visible {
+      color: var(--tvtt-cyan);
+    }
+
+    .tvtt-site-nav a:focus-visible {
+      outline: 2px solid var(--tvtt-cyan);
+      outline-offset: 6px;
+    }
+
     .tvtt-live-hero {
       position: relative;
       display: grid;
@@ -92,6 +147,7 @@
       font-weight: 800;
       line-height: 1.05;
       letter-spacing: 0;
+      text-align: center;
       text-transform: uppercase;
     }
 
@@ -258,6 +314,26 @@
         --tvtt-card-h: 498px;
       }
 
+      .tvtt-site-header {
+        flex-direction: column;
+        gap: 14px;
+        min-height: 0;
+        padding: 12px 16px 16px;
+      }
+
+      .tvtt-site-logo img {
+        width: 122px;
+      }
+
+      .tvtt-site-nav {
+        justify-content: center;
+        gap: 12px 18px;
+      }
+
+      .tvtt-site-nav a {
+        font-size: 0.78rem;
+      }
+
       .tvtt-live-hero {
         min-height: 226px;
         padding-top: 38px;
@@ -290,6 +366,17 @@
 </head>
 <body>
   <main class="tvtt-live-page">
+    <header class="tvtt-site-header">
+      <a class="tvtt-site-logo" href="#" aria-label="Treasure Valley Tech Tavern home">
+        <img src="tvtt-phone-logo.png" alt="Treasure Valley Tech Tavern">
+      </a>
+      <nav class="tvtt-site-nav" aria-label="Main navigation">
+        <a href="https://treasurevalleytechtavern.com/for-bands">For Bands</a>
+        <a href="http://treasurevalleytechtavern.com/for-venues">For Venues</a>
+        <a href="https://treasurevalleytechtavern.com/about">About Us</a>
+      </nav>
+    </header>
+
     <header class="tvtt-live-hero">
       <div>
         <h1 class="tvtt-live-title">Live Sets</h1>
