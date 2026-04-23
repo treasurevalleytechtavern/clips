@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Music | Treasure Valley Tech Tavern</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chicle&family=Cute+Font&family=Jersey+15&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --tvtt-bg: #000;
+      --tvtt-panel: #121212;
+      --tvtt-text: #f4f6f7;
+      --tvtt-muted: #aeb7bd;
+      --tvtt-cyan: #63e0e5;
+      --tvtt-red: #ff1637;
+      --tvtt-card: 320px;
+      --tvtt-card-h: 570px;
+      --tvtt-header-offset: 182px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--tvtt-bg);
+      color: var(--tvtt-text);
+      font-family: "Cute Font", Arial, sans-serif;
+    }
+
+    .tvtt-live-page {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: #000;
+      padding-top: var(--tvtt-header-offset);
+    }
+
+    .tvtt-site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      width: 100%;
+      min-height: 86px;
+      padding: 12px 42px;
+      background: #171717;
+      border-bottom: 1px solid rgba(99, 224, 229, 0.3);
+      backdrop-filter: blur(12px);
+    }
+
+    .tvtt-site-logo {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+    }
+
+    .tvtt-site-logo img {
+      display: block;
+      width: 148px;
+      height: auto;
+    }
+
+    .tvtt-site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;
+    }
+
+    .tvtt-site-nav a {
+      color: var(--tvtt-text);
+      font-family: "Chicle", Arial, sans-serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+      line-height: 1;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .tvtt-site-nav a:hover,
+    .tvtt-site-nav a:focus-visible {
+      color: var(--tvtt-cyan);
+    }
+
+    .tvtt-site-nav a:focus-visible {
+      outline: 2px solid var(--tvtt-cyan);
+      outline-offset: 6px;
+    }
+
+    .tvtt-live-hero {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: #000;
+      line-height: 0;
+    }
+
+    .tvtt-live-hero:before {
+      position: absolute;
+      inset: -40px 0;
+      content: "♪   ♫   ♬   ♩   ♪   ♫   ♬   ♩   ♪   ♫   ♬   ♩";
+      color: rgba(99, 224, 229, 0.12);
+      font-family: "Staatliches", "Bebas Neue", "Arial Narrow", sans-serif;
+      font-size: 3rem;
+      line-height: 2.4;
+      overflow: hidden;
+      pointer-events: none;
+      text-align: left;
+      white-space: pre-wrap;
+      word-spacing: 3.2rem;
+      transform: rotate(-7deg);
+    }
+
+    .tvtt-live-hero:before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: transparent;
+      z-index: 0;
+    }
+
+    .tvtt-live-hero-video {
+      width: min(100%, 1500px);
+      max-width: 1500px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      vertical-align: top;
+    }
+
+    .tvtt-helper-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .tvtt-show {
+      padding: 78px 0 18px;
+      background: #000;
+    }
+
+    .tvtt-site-footer {
+      padding: 28px 16px 34px;
+      border-top: 1px solid rgba(99, 224, 229, 0.22);
+      background: #0b0b0b;
+    }
+
+    .tvtt-footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px 26px;
+      margin: 0 auto;
+      max-width: 960px;
+    }
+
+    .tvtt-footer-nav a {
+      color: var(--tvtt-text);
+      font-family: "Chicle", Arial, sans-serif;
+      font-size: 1.12rem;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .tvtt-footer-copy {
+      margin: 18px 0 0;
+      color: var(--tvtt-muted);
+      font-size: 1.12rem;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .tvtt-footer-nav a:hover,
+    .tvtt-footer-nav a:focus-visible {
+      color: var(--tvtt-cyan);
+    }
+
+    .tvtt-show:first-of-type {
+      padding-top: 94px;
+    }
+
+    .tvtt-show-heading {
+      width: min(100%, 920px);
+      margin: 0 auto 44px;
+      padding: 0 28px;
+      color: var(--tvtt-cyan);
+      font-family: "Jersey 15", Arial, sans-serif;
+      font-size: 3.8rem;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: 0;
+      text-align: center;
+    }
+
+    .tvtt-video-track {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      overflow-x: auto;
+      padding: 0 60px 24px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--tvtt-cyan) #111;
+    }
+
+    .tvtt-video-track::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .tvtt-video-track::-webkit-scrollbar-track {
+      background: #111;
+    }
+
+    .tvtt-video-track::-webkit-scrollbar-thumb {
+      background: var(--tvtt-cyan);
+      border-radius: 8px;
+    }
+
+    .tvtt-video-item {
+      position: relative;
+      flex: 0 0 auto;
+      width: var(--tvtt-card);
+      height: var(--tvtt-card-h);
+      overflow: hidden;
+      scroll-snap-align: start;
+      background: var(--tvtt-panel);
+      border-radius: 8px;
+    }
+
+    .tvtt-video-item iframe,
+    .tvtt-video-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .tvtt-video-item img {
+      object-fit: cover;
+    }
+
+    .tvtt-video-thumb {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      cursor: pointer;
+      background: #111;
+      border: 0;
+      color: inherit;
+      font: inherit;
+    }
+
+    .tvtt-video-thumb:before {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      content: "";
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.52), transparent 34%, rgba(0, 0, 0, 0.18)),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.16), transparent 26%, rgba(0, 0, 0, 0.2));
+      transition: background 160ms ease;
+    }
+
+    .tvtt-video-thumb:hover:before,
+    .tvtt-video-thumb:focus-visible:before {
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.36), transparent 36%, rgba(0, 0, 0, 0.08)),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.08), transparent 26%, rgba(0, 0, 0, 0.12));
+    }
+
+    .tvtt-video-thumb:focus-visible {
+      outline: 3px solid var(--tvtt-cyan);
+      outline-offset: -3px;
+    }
+
+    .tvtt-thumb-label {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      left: 16px;
+      z-index: 2;
+      display: grid;
+      gap: 4px;
+      text-align: left;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.88);
+    }
+
+    .tvtt-thumb-title {
+      overflow: hidden;
+      font-family: "Cute Font", Arial, sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      line-height: 1.1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tvtt-thumb-channel {
+      color: #fff;
+      font-family: "Cute Font", Arial, sans-serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .tvtt-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 2;
+      display: grid;
+      width: 70px;
+      height: 52px;
+      place-items: center;
+      background: var(--tvtt-red);
+      border-radius: 8px;
+      transform: translate(-50%, -50%);
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .tvtt-video-thumb:hover .tvtt-play-icon,
+    .tvtt-video-thumb:focus-visible .tvtt-play-icon {
+      background: #ff304b;
+      transform: translate(-50%, -50%) scale(1.04);
+    }
+
+    .tvtt-play-icon:after {
+      width: 0;
+      height: 0;
+      margin-left: 4px;
+      content: "";
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 18px solid #fff;
+    }
+
+    @media screen and (max-width: 1100px) {
+      :root {
+        --tvtt-card: 280px;
+        --tvtt-card-h: 500px;
+      }
+
+      .tvtt-video-track {
+        padding-right: 30px;
+        padding-left: 30px;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      :root {
+        --tvtt-card: 280px;
+        --tvtt-card-h: 498px;
+      }
+
+      .tvtt-site-header {
+        flex-direction: column;
+        gap: 14px;
+        min-height: 0;
+        padding: 12px 16px 16px;
+      }
+
+      .tvtt-live-page {
+        padding-top: 126px;
+      }
+
+      .tvtt-site-logo img {
+        width: 122px;
+      }
+
+      .tvtt-site-nav {
+        justify-content: center;
+        gap: 12px 18px;
+      }
+
+      .tvtt-site-nav a {
+        font-size: 1.15rem;
+      }
+
+      .tvtt-show {
+        padding-top: 58px;
+      }
+
+      .tvtt-show-heading {
+        font-size: 2.55rem;
+        margin-bottom: 28px;
+        padding: 0 16px;
+      }
+
+      .tvtt-video-track {
+        gap: 16px;
+        padding: 0 16px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="tvtt-live-page">
+    <header class="tvtt-site-header">
+      <a class="tvtt-site-logo" href="../" aria-label="Treasure Valley Tech Tavern clips home">
+        <img src="../tvtt-phone-logo.png" alt="Treasure Valley Tech Tavern">
+      </a>
+      <nav class="tvtt-site-nav" aria-label="Main navigation">
+        <a href="https://treasurevalleytechtavern.com">Home</a>
+        <a href="https://treasurevalleytechtavern.com/for-bands">For Bands</a>
+        <a href="https://treasurevalleytechtavern.com/for-places">For Bars &amp; Venues</a>
+        <a href="https://clips.treasurevalleytechtavern.com">Clips</a>
+        <a href="https://treasurevalleytechtavern.com/about">About Us</a>
+      </nav>
+    </header>
+
+    <header class="tvtt-live-hero">
+      <video class="tvtt-live-hero-video" autoplay muted loop playsinline poster="../tvtt-live-hero-frame-2s.png" aria-hidden="true">
+        <source src="../tvtt-live-hero-neon-trimmed.mp4" type="video/mp4">
+      </video>
+      <p class="tvtt-helper-text">A brick wall with a neon live music sign on it.</p>
+    </header>
+
+    <section class="tvtt-show" aria-labelledby="good-boy-daisy">
+      <h2 class="tvtt-show-heading" id="good-boy-daisy">Good Boy Daisy - Shrine Ballroom - 4/5/2026</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="YYkpA-C5a2g" data-title="&ldquo;Shag Chateau&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy"><img src="https://i.ytimg.com/vi/YYkpA-C5a2g/hqdefault.jpg" alt="Shag Chateau thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Shag Chateau&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="Ipdb6s2xqdM" data-title="&ldquo;Supermodel&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy"><img src="https://i.ytimg.com/vi/Ipdb6s2xqdM/hqdefault.jpg" alt="Supermodel thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Supermodel&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="5qeMLgqMaLQ" data-title="&ldquo;Someone Like You&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy"><img src="https://i.ytimg.com/vi/5qeMLgqMaLQ/hqdefault.jpg" alt="Someone Like You thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Someone Like You&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="v4dBoz6_MTo" data-title="&ldquo;Where Did You Go&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy"><img src="https://i.ytimg.com/vi/v4dBoz6_MTo/hqdefault.jpg" alt="Where Did You Go thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Where Did You Go&rdquo; (Live at Shrine Ballroom) | Boise, ID - 04.05.2026 - Good Boy Daisy</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+
+    <section class="tvtt-show" aria-labelledby="lindsay-ell">
+      <h2 class="tvtt-show-heading" id="lindsay-ell">Lindsay Ell - Shrine Ballroom - 4/5/2026</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="n8UD0BOU8kM" data-title="&ldquo;Magic&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/n8UD0BOU8kM/hqdefault.jpg" alt="Magic thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Magic&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="9L6TziU2HUQ" data-title="&ldquo;Story I Tell Myself&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/9L6TziU2HUQ/hqdefault.jpg" alt="Story I Tell Myself thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Story I Tell Myself&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="n4KqY8Q-ZDY" data-title="&ldquo;I Shouldn't Call You (Guitar Intro)&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/n4KqY8Q-ZDY/hqdefault.jpg" alt="I Shouldn't Call You Guitar Intro thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;I Shouldn't Call You (Guitar Intro)&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="rPddkxxtPrY" data-title="&ldquo;I Shouldn't Call You&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/rPddkxxtPrY/hqdefault.jpg" alt="I Shouldn't Call You thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;I Shouldn't Call You&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="HJgb4UtlXhM" data-title="&ldquo;Criminal&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/HJgb4UtlXhM/hqdefault.jpg" alt="Criminal thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Criminal&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="uU3yqZCcmfs" data-title="&ldquo;Wildfire (feat. Alyssa)&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/uU3yqZCcmfs/hqdefault.jpg" alt="Wildfire feat Alyssa thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Wildfire (feat. Alyssa)&rdquo; (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="KbMBevNAxec" data-title="One Woman Show (Live at Shrine Social Club) | Boise, ID - 04.05.2026"><img src="https://i.ytimg.com/vi/KbMBevNAxec/hqdefault.jpg" alt="One Woman Show thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">One Woman Show (Live at Shrine Social Club) | Boise, ID - 04.05.2026</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+
+    <section class="tvtt-show" aria-labelledby="taylor-party">
+      <h2 class="tvtt-show-heading" id="taylor-party">The Taylor Party - Knitting Factory Boise - 1/23/2026</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="OkpkXcalQ9M" data-title="&ldquo;Bad Blood&rdquo; (Live) | Boise, ID - 01.23.2026 - The Taylor Party"><img src="https://i.ytimg.com/vi/OkpkXcalQ9M/hqdefault.jpg" alt="Bad Blood thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Bad Blood&rdquo; (Live) | Boise, ID - 01.23.2026 - The Taylor Party</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="6Q97QlcCGro" data-title="&ldquo;22&rdquo; Crowd Singalong (DJ Set at Knitting Factory) | Boise, ID - 01.23.2026 - Taylor Party"><img src="https://i.ytimg.com/vi/6Q97QlcCGro/hqdefault.jpg" alt="22 Crowd Singalong thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;22&rdquo; Crowd Singalong (DJ Set at Knitting Factory) | Boise, ID - 01.23.2026 - Taylor Party</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="ack7qIQGCwA" data-title="&ldquo;Father Figure&rdquo; Crowd Moment (DJ Set at Knitting Factory) | Boise, ID - 01.23.26 - The Taylor Party"><img src="https://i.ytimg.com/vi/ack7qIQGCwA/hqdefault.jpg" alt="Father Figure Crowd Moment thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Father Figure&rdquo; Crowd Moment (DJ Set at Knitting Factory) | Boise, ID - 01.23.26 - The Taylor Party</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="wEAjrPx8U-k" data-title="&ldquo;Opalite&rdquo; Crowd Vibes (DJ Set at Knitting Factory) | Boise, ID - 01.23.2026 - The Taylor Party"><img src="https://i.ytimg.com/vi/wEAjrPx8U-k/hqdefault.jpg" alt="Opalite Crowd Vibes thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Opalite&rdquo; Crowd Vibes (DJ Set at Knitting Factory) | Boise, ID - 01.23.2026 - The Taylor Party</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+
+    <section class="tvtt-show" aria-labelledby="tim-mcgraw">
+      <h2 class="tvtt-show-heading" id="tim-mcgraw">Tim McGraw - ExtraMile Arena - 04/06/2024</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="ynjQZn30yRg" data-title="&ldquo;Live Like You Were Dying&rdquo; - Tim McGraw (Live at ExtraMile Arena) | Boise, ID - 04.2024"><img src="https://i.ytimg.com/vi/ynjQZn30yRg/hqdefault.jpg" alt="Live Like You Were Dying thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Live Like You Were Dying&rdquo; - Tim McGraw (Live at ExtraMile Arena) | Boise, ID - 04.2024</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="IXVWdNtWghs" data-title="Tim McGraw - &ldquo;I Like It, I Love It&rdquo; (Live at ExtraMile Arena) | Boise, ID - 04.06.2024"><img src="https://i.ytimg.com/vi/IXVWdNtWghs/hqdefault.jpg" alt="I Like It I Love It thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Tim McGraw - &ldquo;I Like It, I Love It&rdquo; (Live at ExtraMile Arena) | Boise, ID - 04.06.2024</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="ItLnLWf095I" data-title="&ldquo;Truck Yeah&rdquo; - Tim McGraw (Live at ExtraMile Arena) | Boise, ID - 04.06.2024"><img src="https://i.ytimg.com/vi/ItLnLWf095I/hqdefault.jpg" alt="Truck Yeah thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Truck Yeah&rdquo; - Tim McGraw (Live at ExtraMile Arena) | Boise, ID - 04.06.2024</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="LnM7l5jEJWI" data-title="&ldquo;Live Like You Were Dying&rdquo; - Tim McGraw (Live at ExtraMile Arena) | Boise, ID - 04.2024"><img src="https://i.ytimg.com/vi/LnM7l5jEJWI/hqdefault.jpg" alt="Live Like You Were Dying thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Live Like You Were Dying&rdquo; - Tim McGraw (Live at ExtraMile Arena) | Boise, ID - 04.2024</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+
+    <section class="tvtt-show" aria-labelledby="leah-kate">
+      <h2 class="tvtt-show-heading" id="leah-kate">Leah Kate - Live at the Neurolux - 10/15/2023</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="302lBeZX0gU" data-title="Bad Taste (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/302lBeZX0gU/hqdefault.jpg" alt="Bad Taste thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Bad Taste (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="HjQbqDep3pM" data-title="But I Lied (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/HjQbqDep3pM/hqdefault.jpg" alt="But I Lied thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">But I Lied (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="J85hMlq-9zU" data-title="Desperate (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/J85hMlq-9zU/hqdefault.jpg" alt="Desperate thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Desperate (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="ZJ4q--_uPqY" data-title="F U Anthem (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/ZJ4q--_uPqY/hqdefault.jpg" alt="F U Anthem thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">F U Anthem (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="7NyO7VBeSAU" data-title="Happy (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/7NyO7VBeSAU/hqdefault.jpg" alt="Happy thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Happy (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="nrxRRXG1xrQ" data-title="I Forgot (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/nrxRRXG1xrQ/hqdefault.jpg" alt="I Forgot thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">I Forgot (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="5l1QTSqKyQY" data-title="Life Sux (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/5l1QTSqKyQY/hqdefault.jpg" alt="Life Sux thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Life Sux (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="L2j-deM8Buk" data-title="Lucky (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/L2j-deM8Buk/hqdefault.jpg" alt="Lucky thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Lucky (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="QRUMJFE387E" data-title="Monster (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/QRUMJFE387E/hqdefault.jpg" alt="Monster thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Monster (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="UPGG14c5v9g" data-title="Alive and Unwell (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/UPGG14c5v9g/hqdefault.jpg" alt="Alive and Unwell thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">Alive and Unwell (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="H7QmzBza1NQ" data-title="10 Things I Hate About U (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate"><img src="https://i.ytimg.com/vi/H7QmzBza1NQ/hqdefault.jpg" alt="10 Things I Hate About U thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">10 Things I Hate About U (Live at Neurolux, Boise ID - Oct 15, 2023) - Leah Kate</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+
+    <section class="tvtt-show" aria-labelledby="aja">
+      <h2 class="tvtt-show-heading" id="aja">AJA - Live at the Neurolux - 10/15/2023</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="7Gqnec2Ih4E" data-title="AJA - &ldquo;Hard to Handle&rdquo; (Live at Neurolux) | Boise, ID - 10.15.2023"><img src="https://i.ytimg.com/vi/7Gqnec2Ih4E/hqdefault.jpg" alt="Hard to Handle thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">AJA - &ldquo;Hard to Handle&rdquo; (Live at Neurolux) | Boise, ID - 10.15.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="4SYP8FiMGps" data-title="AJA - End of Set (Live at Neurolux) | Boise, ID - 10.15.2023"><img src="https://i.ytimg.com/vi/4SYP8FiMGps/hqdefault.jpg" alt="End of Set thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">AJA - End of Set (Live at Neurolux) | Boise, ID - 10.15.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="AaaTaipKeHE" data-title="AJA - &ldquo;Red Button&rdquo; (Bridge) Live at Neurolux | Boise, ID - 10.15.2023"><img src="https://i.ytimg.com/vi/AaaTaipKeHE/hqdefault.jpg" alt="Red Button Bridge thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">AJA - &ldquo;Red Button&rdquo; (Bridge) Live at Neurolux | Boise, ID - 10.15.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="EBqmyHQMIM4" data-title="AJA - Live Opening Set | Leah Kate Show | Boise | Oct 15, 2023"><img src="https://i.ytimg.com/vi/EBqmyHQMIM4/hqdefault.jpg" alt="Live Opening Set thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">AJA - Live Opening Set | Leah Kate Show | Boise | Oct 15, 2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="URM09rxkGnc" data-title="AJA Live at the Knitting Factory - Boise | Leah Kate Show | Oct 15, 2023"><img src="https://i.ytimg.com/vi/URM09rxkGnc/hqdefault.jpg" alt="AJA Live at the Knitting Factory thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">AJA Live at the Knitting Factory - Boise | Leah Kate Show | Oct 15, 2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="yfK5b3K8dYM" data-title="AJA (Opening Set) | Leah Kate Show - Boise | Oct 15, 2023"><img src="https://i.ytimg.com/vi/yfK5b3K8dYM/hqdefault.jpg" alt="AJA Opening Set thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">AJA (Opening Set) | Leah Kate Show - Boise | Oct 15, 2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+    <section class="tvtt-show" aria-labelledby="corook">
+      <h2 class="tvtt-show-heading" id="corook">corook - Live at the Knitting Factory - 3/4/2023</h2>
+      <div class="tvtt-video-track">
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="Jh5L8DbF4Eo" data-title="&ldquo;Snakes&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/Jh5L8DbF4Eo/hqdefault.jpg" alt="Snakes thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Snakes&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="hZ5BdVGzcFs" data-title="&ldquo;Hell Yeah (Kazoo)&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/hZ5BdVGzcFs/hqdefault.jpg" alt="Hell Yeah Kazoo thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Hell Yeah (Kazoo)&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="eZfPQh6T7oE" data-title="&ldquo;It's Okay&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/eZfPQh6T7oE/hqdefault.jpg" alt="It's Okay thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;It's Okay&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="vboR4piP08c" data-title="&ldquo;idk god&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/vboR4piP08c/hqdefault.jpg" alt="idk god thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;idk god&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="ES7Zp8GQrXU" data-title="&ldquo;idk god&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/ES7Zp8GQrXU/hqdefault.jpg" alt="idk god thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;idk god&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="KiIzWUNzdPc" data-title="&ldquo;Hell Yeah (Kazoo)&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/KiIzWUNzdPc/hqdefault.jpg" alt="Hell Yeah Kazoo thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Hell Yeah (Kazoo)&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="te33PXedqn4" data-title="&ldquo;Hell Yeah (Crowd)&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/te33PXedqn4/hqdefault.jpg" alt="Hell Yeah Crowd thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Hell Yeah (Crowd)&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+        <div class="tvtt-video-item"><button class="tvtt-video-thumb" type="button" data-video-id="lJmJJpel8o4" data-title="&ldquo;Snakes&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023"><img src="https://i.ytimg.com/vi/lJmJJpel8o4/hqdefault.jpg" alt="Snakes thumbnail" loading="lazy"><span class="tvtt-thumb-label"><span class="tvtt-thumb-title">&ldquo;Snakes&rdquo; - corook (Live at Knitting Factory) | Boise, ID - 03.04.2023</span><span class="tvtt-thumb-channel">Treasure Valley Tech Tavern</span></span><span class="tvtt-play-icon" aria-hidden="true"></span></button></div>
+      </div>
+    </section>
+
+    <footer class="tvtt-site-footer">
+      <nav class="tvtt-footer-nav" aria-label="Footer">
+        <a href="https://treasurevalleytechtavern.com">Home</a>
+        <a href="https://treasurevalleytechtavern.com/for-bands">For Bands</a>
+        <a href="https://treasurevalleytechtavern.com/for-places">For Bars &amp; Venues</a>
+        <a href="https://clips.treasurevalleytechtavern.com">Clips</a>
+        <a href="https://treasurevalleytechtavern.com/about">About Us</a>
+      </nav>
+      <p class="tvtt-footer-copy">Copyright © 2026 Treasure Valley Tech Tavern - Boise, Idaho - All Rights Reserved.</p>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll(".tvtt-video-thumb img").forEach(function (img) {
+      const thumb = img.closest(".tvtt-video-thumb");
+
+      if (!thumb) {
+        return;
+      }
+
+      const videoId = thumb.dataset.videoId;
+
+      if (!videoId) {
+        return;
+      }
+
+      img.addEventListener("error", function handleThumbError() {
+        if (img.dataset.thumbFallbackApplied === "true") {
+          return;
+        }
+
+        img.dataset.thumbFallbackApplied = "true";
+        img.src = "https://i.ytimg.com/vi/" + encodeURIComponent(videoId) + "/hqdefault.jpg";
+      });
+
+      img.src = "https://i.ytimg.com/vi/" + encodeURIComponent(videoId) + "/maxresdefault.jpg";
+    });
+
+    document.addEventListener("click", function (event) {
+      const thumb = event.target.closest(".tvtt-video-thumb");
+
+      if (!thumb) {
+        return;
+      }
+
+      const videoId = thumb.dataset.videoId;
+      const title = thumb.dataset.title || "Treasure Valley Tech Tavern video";
+      const iframe = document.createElement("iframe");
+
+      iframe.src = "https://www.youtube.com/embed/" + encodeURIComponent(videoId) + "?autoplay=1&rel=0";
+      iframe.title = title;
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+
+      thumb.replaceWith(iframe);
+    });
+  </script>
+</body>
+</html>
