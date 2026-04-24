@@ -46,16 +46,19 @@
       left: 0;
       right: 0;
       z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 28px;
       width: 100%;
-      min-height: 86px;
       padding: 12px 42px;
       background: #171717;
       border-bottom: 1px solid rgba(99, 224, 229, 0.3);
       backdrop-filter: blur(12px);
+    }
+
+    .tvtt-site-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      min-height: 61px;
     }
 
     .tvtt-site-logo {
@@ -71,11 +74,18 @@
     }
 
     .tvtt-site-nav {
+      margin-left: auto;
+    }
+
+    .tvtt-site-nav-list {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       align-items: center;
       justify-content: flex-end;
-      gap: 24px;
+      gap: clamp(14px, 1.8vw, 24px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
     .tvtt-site-nav a {
@@ -93,7 +103,69 @@
       color: var(--tvtt-cyan);
     }
 
+    .tvtt-site-nav-toggle {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid rgba(99, 224, 229, 0.45);
+      border-radius: 8px;
+      color: var(--tvtt-text);
+      background: transparent;
+      font-family: "Chicle", Arial, sans-serif;
+      font-size: 1.05rem;
+      line-height: 1;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .tvtt-site-nav-toggle-icon,
+    .tvtt-site-nav-toggle-icon::before,
+    .tvtt-site-nav-toggle-icon::after {
+      display: block;
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      transition: transform 160ms ease, opacity 160ms ease;
+      content: "";
+    }
+
+    .tvtt-site-nav-toggle-icon {
+      position: relative;
+    }
+
+    .tvtt-site-nav-toggle-icon::before {
+      position: absolute;
+      top: -6px;
+      left: 0;
+    }
+
+    .tvtt-site-nav-toggle-icon::after {
+      position: absolute;
+      top: 6px;
+      left: 0;
+    }
+
+    .tvtt-site-header.is-open .tvtt-site-nav-toggle-icon {
+      background: transparent;
+    }
+
+    .tvtt-site-header.is-open .tvtt-site-nav-toggle-icon::before {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .tvtt-site-header.is-open .tvtt-site-nav-toggle-icon::after {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
     .tvtt-site-nav a:focus-visible {
+      outline: 2px solid var(--tvtt-cyan);
+      outline-offset: 6px;
+    }
+
+    .tvtt-site-nav-toggle:focus-visible {
       outline: 2px solid var(--tvtt-cyan);
       outline-offset: 6px;
     }
@@ -369,38 +441,68 @@
       }
     }
 
-    @media screen and (max-width: 600px) {
-      :root {
-        --tvtt-card: 280px;
-        --tvtt-card-h: 498px;
-      }
-
+    @media screen and (max-width: 960px) {
       .tvtt-site-header {
-        flex-direction: column;
-        gap: 14px;
-        min-height: 0;
-        padding: 12px 16px 16px;
+        padding: 12px 16px 14px;
       }
 
-      .tvtt-live-page {
-        padding-top: 126px;
+      .tvtt-site-header-bar {
+        flex-wrap: wrap;
+        gap: 14px 18px;
       }
 
       .tvtt-site-logo img {
         width: 122px;
       }
 
+      .tvtt-site-nav-toggle {
+        display: inline-flex;
+      }
+
       .tvtt-site-nav {
-        justify-content: center;
-        gap: 12px 18px;
+        display: none;
+        width: 100%;
+        margin: 0;
+        padding-top: 14px;
+      }
+
+      .tvtt-site-header.is-open .tvtt-site-nav {
+        display: block;
+      }
+
+      .tvtt-site-nav-list {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0;
+        padding-top: 14px;
+        border-top: 1px solid rgba(99, 224, 229, 0.22);
+      }
+
+      .tvtt-site-nav li,
+      .tvtt-site-nav a {
+        width: 100%;
       }
 
       .tvtt-site-nav a {
+        display: block;
+        padding: 10px 0;
         font-size: 1.15rem;
+        text-align: right;
       }
 
       .tvtt-footer-nav a {
         font-size: 1.1rem;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      :root {
+        --tvtt-card: 280px;
+        --tvtt-card-h: 498px;
+      }
+
+      .tvtt-live-page {
+        padding-top: 126px;
       }
 
       .tvtt-show {
@@ -423,17 +525,25 @@
 <body>
   <main class="tvtt-live-page">
     <header class="tvtt-site-header">
-      <a class="tvtt-site-logo" href="../" aria-label="Treasure Valley Tech Tavern clips home">
-        <img src="../tvtt-phone-logo.png" alt="Treasure Valley Tech Tavern">
-      </a>
-      <nav class="tvtt-site-nav" aria-label="Main navigation">
-        <a href="https://treasurevalleytechtavern.com">Home</a>
-        <a href="https://help.treasurevalleytechtavern.com/for-bands/">For Bands</a>
-        <a href="https://help.treasurevalleytechtavern.com/for-places/">For Bars &amp; Venues</a>
-        <a href="https://clips.treasurevalleytechtavern.com">Clips</a>
-        <a href="https://places.treasurevalleytechtavern.com">Places</a>
-        <a href="https://treasurevalleytechtavern.com/about">About Us</a>
-      </nav>
+      <div class="tvtt-site-header-bar">
+        <a class="tvtt-site-logo" href="../" aria-label="Treasure Valley Tech Tavern clips home">
+          <img src="../tvtt-phone-logo.png" alt="Treasure Valley Tech Tavern">
+        </a>
+        <button class="tvtt-site-nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+          <span>Menu</span>
+          <span class="tvtt-site-nav-toggle-icon" aria-hidden="true"></span>
+        </button>
+        <nav class="tvtt-site-nav" id="site-navigation" aria-label="Main navigation">
+          <ul class="tvtt-site-nav-list">
+            <li><a href="https://treasurevalleytechtavern.com">Home</a></li>
+            <li><a href="https://help.treasurevalleytechtavern.com/for-bands/">For Bands</a></li>
+            <li><a href="https://help.treasurevalleytechtavern.com/for-places/">For Bars &amp; Venues</a></li>
+            <li><a href="https://clips.treasurevalleytechtavern.com" aria-current="page">Clips</a></li>
+            <li><a href="https://places.treasurevalleytechtavern.com">Places</a></li>
+            <li><a href="https://treasurevalleytechtavern.com/about">About Us</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <header class="tvtt-live-hero">
@@ -541,6 +651,59 @@
   </main>
 
   <script>
+    (function () {
+      const header = document.querySelector(".tvtt-site-header");
+
+      if (!header) {
+        return;
+      }
+
+      const toggle = header.querySelector(".tvtt-site-nav-toggle");
+      const nav = header.querySelector(".tvtt-site-nav");
+      const mobileQuery = window.matchMedia("(max-width: 960px)");
+
+      if (!toggle || !nav) {
+        return;
+      }
+
+      function closeMenu() {
+        header.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+
+      toggle.addEventListener("click", function () {
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+
+        if (isOpen) {
+          closeMenu();
+          return;
+        }
+
+        header.classList.add("is-open");
+        toggle.setAttribute("aria-expanded", "true");
+      });
+
+      nav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (mobileQuery.matches) {
+            closeMenu();
+          }
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeMenu();
+        }
+      });
+
+      mobileQuery.addEventListener("change", function (event) {
+        if (!event.matches) {
+          closeMenu();
+        }
+      });
+    }());
+
     document.querySelectorAll(".tvtt-video-thumb img").forEach(function (img) {
       const thumb = img.closest(".tvtt-video-thumb");
 
